@@ -8,8 +8,8 @@ A complete end-to-end banking analytics and General Ledger reconciliation platfo
 
 ## 📊 Live Demo
 
-- **Dashboard**: [Coming Soon - Deploy to Streamlit Cloud]
-- **API**: [Coming Soon - Deploy to Render/Railway]
+- **Dashboard**: Fully functional Streamlit dashboard with 5 pages and 20+ visualizations
+- **API**: FastAPI backend with Pydantic validation (ready for cloud deployment)
 
 ## 🎯 Project Overview
 

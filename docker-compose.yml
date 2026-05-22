@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: banking_postgres
+    environment:
+      POSTGRES_DB: banking_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Python Application (ETL + API)
+  app:
+    build: .
+    container_name: banking_app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/banking_db
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: banking_db
+      DB_USER: postgres
+      DB_PASSWORD: password
+      NUM_CUSTOMERS: 5000
+      NUM_ACCOUNTS: 8000
+      NUM_TRANSACTIONS: 50000
+      NUM_GL_ENTRIES: 50000
+      DATA_MONTHS: 12
+      SEED: 42
+      LOG_LEVEL: INFO
+    ports:
+      - "8000:8000"
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    command: /bin/bash -c "python -m pipelines.generate_synthetic_data && python -m pipelines.etl_main"
+
+  # FastAPI Server
+  api:
+    build: .
+    container_name: banking_api
+    depends_on:
+      - postgres
+      - app
+    environment:
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/banking_db
+      API_HOST: 0.0.0.0
+      API_PORT: 8000
+    ports:
+      - "8001:8000"
+    command: uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Streamlit Dashboard
+  dashboard:
+    build: .
+    container_name: banking_dashboard
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/banking_db
+    ports:
+      - "8502:8501"
+    command: streamlit run app/dashboard/main.py --server.port=8501 --server.address=0.0.0.0
+
+volumes:
+  postgres_data:

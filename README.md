@@ -4,6 +4,8 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Status: Production](https://img.shields.io/badge/Status-Production--Ready-brightgreen.svg)
 
+**Author:** Abhijeet Reddy
+
 A complete end-to-end banking analytics and General Ledger reconciliation platform built with Python, PostgreSQL, FastAPI, and Streamlit. Processes realistic synthetic banking transactions, calculates executive KPIs, reconciles GL entries, and provides an interactive analytics dashboard.
 
 ## 📊 Live Demo

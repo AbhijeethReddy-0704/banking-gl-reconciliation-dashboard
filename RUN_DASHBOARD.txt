@@ -1,0 +1,154 @@
+================================================================================
+STREAMLIT DASHBOARD - QUICK START (SQLite Fallback + PostgreSQL Support)
+================================================================================
+
+COMMAND (from project root):
+
+    cd C:\Users\abhij\banking-gl-reconciliation-dashboard
+    streamlit run streamlit_app.py
+
+Dashboard auto-detects PostgreSQL. If unavailable, uses SQLite fallback mode.
+
+================================================================================
+FASTEST START (No Database Setup)
+================================================================================
+
+1. Generate synthetic data:
+   python -m pipelines.generate_synthetic_data
+
+2. Start dashboard:
+   streamlit run streamlit_app.py
+
+3. Open browser:
+   http://localhost:8501
+
+Sidebar shows: "Using Local SQLite Cache" - means no PostgreSQL needed!
+
+================================================================================
+DATABASE MODES
+================================================================================
+
+Mode 1: LOCAL SQLITE (Default, No Setup)
+  - CSV files → SQLite cache.db
+  - Status: "Using Local SQLite Cache"
+  - Works offline, perfect for portfolio/Streamlit Cloud
+
+Mode 2: POSTGRESQL (Optional, Production)
+  - Requires: docker compose up postgres -d
+  - Set: DATABASE_URL env var
+  - Status: "Connected to PostgreSQL"
+  - For high-volume deployments
+
+Dashboard automatically selects the available database mode on startup.
+
+================================================================================
+REQUIREMENTS
+================================================================================
+
+1. Python packages:
+   pip install -r requirements.txt
+
+2. Synthetic data (generates on first run if missing):
+   python -m pipelines.generate_synthetic_data
+
+3. PostgreSQL (OPTIONAL - dashboard works without it):
+   docker compose up postgres -d
+
+================================================================================
+EXPECTED OUTPUT
+================================================================================
+
+When you run: streamlit run streamlit_app.py
+
+You'll see:
+
+    [OK] Database initialized
+    [OK] Data available
+    Database mode: sqlite
+
+    You can now view your Streamlit app in your browser.
+
+    Local URL: http://localhost:8501
+    Network URL: http://192.168.x.x:8501
+
+Visit: http://localhost:8501
+
+Sidebar shows: "📦 Using Local SQLite Cache"
+
+================================================================================
+DASHBOARD PAGES
+================================================================================
+
+1. Executive KPI Overview
+   - Total revenue, transaction volume, match rate
+   - Monthly revenue trend chart
+   - Product line revenue breakdown
+
+2. Product Line Performance
+   - Sortable product metrics table
+   - Revenue distribution pie chart
+
+3. GL Reconciliation Center
+   - Match rate gauge and summary KPIs
+   - Exceptions by type and severity
+
+4. Exception Drilldown
+   - Filterable exception table
+   - CSV export button
+
+5. Data Quality Report
+   - Row count summary
+   - Validation checks
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+Issue: "streamlit: command not found"
+Fix: pip install streamlit
+
+Issue: "ModuleNotFoundError: No module named 'app'"
+Fix: Run from project root: C:\Users\abhij\banking-gl-reconciliation-dashboard
+     Use: streamlit run streamlit_app.py
+
+Issue: "No data showing"
+Fix: python -m pipelines.generate_synthetic_data
+
+Issue: "Port 8501 already in use"
+Fix: streamlit run streamlit_app.py --server.port 8502
+
+Issue: Database error (even in SQLite mode)
+Fix: Delete cache: rm data/cache.db
+     Then restart: streamlit run streamlit_app.py
+
+================================================================================
+QUICK REFERENCE
+================================================================================
+
+Start:              streamlit run streamlit_app.py
+Stop:               Ctrl+C
+URL:                http://localhost:8501
+Config:             .streamlit/config.toml
+Dashboard code:     app/dashboard/main.py
+Database fallback:  app/core/local_data.py
+Root entry:         streamlit_app.py
+
+Generate data:      python -m pipelines.generate_synthetic_data
+Run tests:          pytest
+Verify setup:       python verify_dashboard.py
+
+================================================================================
+STATUS: READY TO RUN
+================================================================================
+
+Dashboard is production-ready with:
+  ✓ PostgreSQL support (optional)
+  ✓ SQLite fallback (default)
+  ✓ Auto data generation
+  ✓ Graceful error handling
+  ✓ Streamlit Cloud compatible
+  ✓ Portfolio-ready
+
+Run: streamlit run streamlit_app.py
+
+================================================================================

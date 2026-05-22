@@ -73,7 +73,7 @@ services:
       DATABASE_URL: postgresql://postgres:password@postgres:5432/banking_db
     ports:
       - "8502:8501"
-    command: streamlit run app/dashboard/main.py --server.port=8501 --server.address=0.0.0.0
+    command: streamlit run streamlit_app.py --server.port=8501 --server.address=0.0.0.0
 
 volumes:
   postgres_data:
